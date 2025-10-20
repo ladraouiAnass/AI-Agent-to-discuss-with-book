@@ -1,176 +1,213 @@
-# Agentic RAG System
+# AI Agent for Document Discussion
 
-An intelligent Retrieval-Augmented Generation (RAG) system that enables semantic querying of PDF documents using advanced language models and vector embeddings.
+An intelligent conversational AI system that enables natural language interaction with PDF documents through advanced retrieval-augmented generation (RAG) technology.
 
 ## Overview
 
-This project implements an agentic RAG pipeline that allows users to:
-- Upload and process multiple PDF documents
-- Query documents using natural language
-- Receive contextually relevant, AI-generated responses
-- Export answers as PDF or text files
-- Automatically detect and handle document updates
+This project creates an AI agent that can understand and discuss the contents of books and documents. Users can upload PDF files and engage in meaningful conversations about the content, receiving accurate, contextually relevant responses based on the document's information.
 
-## Architecture
+**Key Capabilities:**
+- Process and understand multiple PDF documents
+- Engage in natural conversations about document content
+- Provide accurate, source-based answers
+- Export conversation results
+- Automatically handle document updates
 
-### Core Components
+## System Architecture
 
-**RAG Pipeline**
-1. **Document Processing** - Extracts and chunks text from PDF files
-2. **Embedding Generation** - Creates vector embeddings using SentenceTransformer
-3. **Intelligent Retrieval** - Finds relevant chunks via cosine similarity
-4. **LLM Response** - Generates answers using Gemma2 language model
-5. **Web Interface** - Django-based frontend for user interaction
+### Core Pipeline
+
+1. **Document Ingestion** - Extracts and processes text from PDF files
+2. **Content Vectorization** - Creates semantic embeddings using SentenceTransformer
+3. **Intelligent Retrieval** - Finds relevant content through similarity search
+4. **Response Generation** - Produces contextual answers using Gemma2 LLM
+5. **Web Interface** - User-friendly Django application
 
 ### Technology Stack
 
 | Component | Technology |
 |-----------|-----------|
-| Language | Python |
-| Deep Learning | PyTorch |
-| Embeddings | SentenceTransformer (HuggingFace) |
-| LLM | Gemma2 (via Ollama) |
-| NLP | NLTK |
-| Numerics | NumPy |
+| Backend Language | Python 3.8+ |
+| Machine Learning | PyTorch |
+| Text Embeddings | SentenceTransformer (HuggingFace) |
+| Language Model | Gemma2 (via Ollama) |
+| Natural Language Processing | NLTK |
+| Numerical Computing | NumPy |
 | Web Framework | Django |
+| Document Processing | PyPDF2 |
 
 ## Project Structure
 
 ```
 RAG/
-├── Documents.py      # PDF loading & change detection
-├── Processing.py     # Text chunking
+├── Documents.py      # PDF processing and change detection
+├── Processing.py     # Text chunking and preprocessing
 ├── Embedding.py      # Vector embedding generation
-├── Retriever.py      # Similarity search
+├── Retriever.py      # Semantic similarity search
 ├── LLM.py           # Language model interface
-├── Main.py          # Orchestration layer
-└── Source_files/    # PDF documents
+├── Main.py          # System orchestration
+└── Source_files/    # Document storage directory
 
 Website/
 └── RAGapp/          # Django web application
+    ├── views.py     # Request handling
+    ├── models.py    # Data models
+    ├── urls.py      # URL routing
+    └── templates/   # HTML templates
 ```
 
-## Installation
+## Installation Guide
 
-### Prerequisites
-- Python 3.8+
-- Ollama installed locally
-- Ngrok account (for Colab setup)
+### System Requirements
+- Python 3.8 or higher
+- 8GB RAM minimum (16GB recommended)
+- Ollama runtime environment
+- Internet connection for model downloads
 
-### Setup
+### Quick Setup
 
-1. **Clone the repository**
+1. **Clone Repository**
 ```bash
-git clone <repository-url>
-cd Agentic-RAG-main
+git clone https://github.com/your-username/ai-document-agent.git
+cd ai-document-agent
 ```
 
-2. **Install dependencies**
+2. **Install Python Dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
-3. **Install Ollama**
-   - Download from: https://ollama.com/download/windows
-   - Pull the Gemma2 model:
+3. **Setup Ollama**
+   - Download: https://ollama.com/download
+   - Install Gemma2 model:
 ```bash
-ollama run gemma2:2b
+ollama pull gemma2:2b
 ```
 
-## Usage
-
-### Running with Google Colab (Recommended)
-
-For enhanced performance, use Google Colab with a local tunnel:
-
-1. **Setup Ngrok**
-   - Create account: https://ngrok.com/
-   - Save your authentication token
-
-2. **Configure Colab**
-   - Open `ollam_server.ipynb` in Google Colab
-   - Run the first two cells
-   - In the third cell, set your token:
-```python
-AUTH_TOKEN = "your_ngrok_token_here"
-```
-   - Run the cell to get your ngrok URL (ends with `ngrok-free.app`)
-
-3. **Configure Local Environment**
-   - Open PowerShell and set the Ollama host:
-```powershell
-$env:OLLAMA_HOST="https://your-url.ngrok-free.app"
-```
-
-4. **Update LLM Configuration**
-   - Edit `RAG/LLM.py`
-   - Set `self.ollama_host` to your ngrok URL
-
-5. **Start the Application**
+4. **Initialize Database**
 ```bash
 cd Website
-python manage.py runserver
+python manage.py migrate
 ```
 
-6. **Access the Interface**
-   - Navigate to: http://localhost:8000
+## Usage Instructions
 
-### Running Locally
+### Local Development Setup
 
-If running without Colab, ensure Ollama is running locally:
-
+1. **Start Ollama Service**
 ```bash
 ollama serve
+```
+
+2. **Launch Web Application**
+```bash
 cd Website
 python manage.py runserver
 ```
 
-## Features
+3. **Access Interface**
+   - Open browser to: http://localhost:8000
+   - Upload PDF documents
+   - Start asking questions about your documents
 
-### Smart Document Management
-- **Automatic Change Detection** - Uses file hashing to avoid redundant processing
-- **Incremental Updates** - Only reprocesses modified documents
-- **Multi-document Support** - Handle multiple PDFs simultaneously
+### Cloud Setup with Google Colab
 
-### Intelligent Querying
-- **Semantic Search** - Vector-based similarity matching
-- **Context Awareness** - Identifies out-of-scope queries
-- **Relevant Responses** - LLM-generated answers based on retrieved context
+For enhanced performance using Google Colab's GPU resources:
 
-### Export Capabilities
-- Save responses as PDF documents
-- Export answers as text files
+1. **Configure Ngrok Tunnel**
+   - Sign up at: https://ngrok.com/
+   - Get authentication token
 
-## Example
+2. **Setup Colab Environment**
+   - Open `ollama_server.ipynb` in Google Colab
+   - Add your ngrok token:
+```python
+AUTH_TOKEN = "your_actual_ngrok_token"
+```
+   - Execute cells to get public URL
 
-![Alt text for the image](example.PNG)
+3. **Connect Local Application**
+```bash
+# Windows PowerShell
+$env:OLLAMA_HOST="https://your-ngrok-url.ngrok-free.app"
 
-## Model Options
+# Linux/Mac
+export OLLAMA_HOST="https://your-ngrok-url.ngrok-free.app"
+```
 
-Explore different Gemma2 variants:
-- `gemma2:2b` - Lightweight, faster inference
-- `gemma2:9b` - Balanced performance
-- `gemma2:27b` - Maximum accuracy
+4. **Update Configuration**
+   - Edit `RAG/LLM.py`
+   - Set `ollama_host` to your ngrok URL
 
-Full model list: https://ollama.com/library/gemma2
+## Key Features
 
-## Future Enhancements
+### Intelligent Document Processing
+- **Smart Change Detection** - Avoids reprocessing unchanged documents
+- **Efficient Chunking** - Optimizes text segments for better retrieval
+- **Multi-format Support** - Handles various PDF structures and layouts
 
-- [ ] Multi-LLM support (GPT, Claude, LLaMA)
-- [ ] Enhanced UI/UX with modern frontend framework
-- [ ] Optimized chunking strategies for large documents
-- [ ] Real-time streaming responses
-- [ ] Conversation history and memory
-- [ ] Advanced query refinement
+### Advanced Conversational AI
+- **Context-Aware Responses** - Maintains conversation context
+- **Source Attribution** - References specific document sections
+- **Relevance Filtering** - Identifies when questions are outside document scope
+
+### User Experience
+- **Intuitive Web Interface** - Clean, responsive design
+- **Real-time Processing** - Fast query responses
+- **Export Options** - Save conversations as PDF or text
+- **Document Management** - Easy upload and organization
+
+## Model Configuration
+
+Choose the appropriate Gemma2 variant based on your hardware:
+
+- **gemma2:2b** - Fast responses, lower memory usage (4GB RAM)
+- **gemma2:9b** - Balanced performance and quality (8GB RAM)
+- **gemma2:27b** - Highest quality responses (16GB+ RAM)
+
+View all available models: https://ollama.com/library/gemma2
+
+## Development Roadmap
+
+### Planned Enhancements
+- **Multi-Model Support** - Integration with GPT, Claude, and LLaMA
+- **Advanced UI** - Modern React-based frontend
+- **Conversation Memory** - Persistent chat history
+- **Real-time Streaming** - Live response generation
+- **Enhanced Analytics** - Usage statistics and insights
+- **API Development** - RESTful API for external integrations
+
+### Performance Optimizations
+- **Caching System** - Faster repeated queries
+- **Batch Processing** - Efficient multi-document handling
+- **Compression** - Reduced storage requirements
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Make your changes and test thoroughly
+4. Submit a pull request with detailed description
+
+### Development Guidelines
+- Follow PEP 8 style guidelines
+- Add unit tests for new features
+- Update documentation as needed
+- Ensure backward compatibility
 
 ## License
 
-[Add your license here]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contact
+## Support and Contact
 
-[Add your contact information here]
+For questions, issues, or suggestions:
+- **GitHub Issues**: Report bugs and request features
+- **Documentation**: Check the [Wiki](../../wiki) for detailed guides
+- **Community**: Join discussions in the [Discussions](../../discussions) section
+
+---
+
+**Built with ❤️ for the AI community**
